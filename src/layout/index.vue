@@ -63,10 +63,14 @@
           <a-sub-menu key="sub2">
             <span slot="title"><a-icon type="area-chart" />聚云管理</span>
             <a-menu-item key="2">
-              <a-icon type="security-scan" />DDOS监控
+              <router-link to="/monitor">
+                <a-icon type="security-scan" />DDOS监控
+              </router-link>
             </a-menu-item>
             <a-menu-item key="3">
-              <a-icon type="ordered-list" />策略管理
+              <router-link to="/policy_mgt">
+                <a-icon type="ordered-list" />策略管理
+              </router-link>
             </a-menu-item>
           </a-sub-menu>
           <a-sub-menu key="sub3">
@@ -102,11 +106,7 @@
 
       <!-- 内容区域 -->
       <a-layout class="content1" style="padding: 0 24px 24px">
-        <a-layout-content
-          :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }"
-        >
-          内容
-        </a-layout-content>
+        <AppMain />
       </a-layout>
       <!-- /内容区域 -->
 
@@ -117,11 +117,18 @@
 </template>
 
 <script>
+// 引入组件
+import AppMain from './components/AppMain.vue'
+
 export default {
   data () {
     return {
       collapsed: false,
     }
+  },
+  components: {
+    // 注册组件
+    AppMain
   }
 }
 </script>

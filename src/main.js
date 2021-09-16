@@ -5,6 +5,8 @@ import App from './App.vue'
 import Antd from 'ant-design-vue'
 // 引入Ant Design CSS样式
 import 'ant-design-vue/dist/antd.css'
+// 引入自定义全局样式
+import '@/styles/index.css'
 
 // 引入路由
 import router from '@/router'

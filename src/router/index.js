@@ -10,8 +10,23 @@ const routes = [{
     // layout布局页面
     path: '/',
     name: 'layout',
+    redirect: '/monitor', //默认跳转到监控页面
     component: () =>
-        import ('@/layout')
+        import ('@/layout'),
+    // 配置二级路由规则
+    children: [{
+        // 监控页面
+        path: '/monitor',
+        name: 'monitor',
+        component: () =>
+            import ('@/views/Monitor')
+    }, {
+        // 策略管理页面
+        path: '/policy_mgt',
+        name: 'policy_mgt',
+        component: () =>
+            import ('@/views/PolicyMgt')
+    }]
 }]
 
 // 生成路由对象

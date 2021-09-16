@@ -1,0 +1,42 @@
+/* 内容样式 */
+
+.common-content {
+    box-shadow: 0 2px 4px 0 rgb(54 58 80 / 32%)
+}
+
+
+/* 标题样式 */
+
+.common-title {
+    text-align: center;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+
+/* 搜索栏样式 */
+
+.common-search-content {
+    display: flex;
+}
+
+
+/* 数据加载中样式 */
+
+.ant-spin-nested-loading>div>.ant-spin.ant-spin-show-text {
+    margin-top: 60px;
+}
+
+
+/* 表格样式 */
+
+.ant-spin-nested-loading {
+    margin-top: 10px;
+}
+
+
+/* 表格行-自定义颜色 */
+
+.rowClass {
+    color: red;
+}
