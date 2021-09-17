@@ -22,8 +22,11 @@
               />
               <a-input placeholder="IP地址 或 地址段" allowClear style="margin-left:20px; width:200px;" />
               <a-range-picker @change="onChange" style="margin-left: 20px;" />
-              <a-button type="primary" style="margin-left: 20px;">
+              <a-button type="primary" style="margin-left: 20px;" icon="search">
                 搜索
+              </a-button>
+              <a-button class="btnDownload" type="primary" style="margin-left: 20px;" icon="download">
+                导出
               </a-button>
           </div>
           <!-- /搜索栏 -->
@@ -39,12 +42,35 @@
             :rowClassName="tableRowClass"
             >
               <!-- 操作 单元格 插槽 -->
-              <template slot="action">
-                <a-button type="link" size="small" icon="unlock" @click="unbind">解除</a-button>
+              <template slot="action" slot-scope="actionScope,record">
+                <a-button
+                type="link"
+                size="small"
+                icon="unlock"
+                :disabled="record.status ? true : false"
+                @click="unbind"
+                >
+                  解除
+                </a-button>
                 <!-- <a-divider type="vertical" /> -->
-                <a-button type="link" size="small" icon="clock-circle" @click="postponed">延期</a-button>
+                <a-button
+                type="link"
+                size="small"
+                icon="clock-circle"
+                :disabled="record.status ? true : false"
+                @click="postponed"
+                >
+                  延期
+                </a-button>
                 <!-- <a-divider type="vertical" /> -->
-                <a-button type="link" size="small" icon="download" @click="download">详情</a-button>
+                <a-button
+                type="link"
+                size="small"
+                icon="download"
+                @click="download"
+                >
+                  详情
+                </a-button>
               </template>
               <!-- /操作 单元格 插槽 -->
             </a-table>
@@ -221,7 +247,7 @@ export default {
       wrapperCol: { span: 10 },
       form: {
         name: ''
-      }
+      },
     }
   },
   watch: {

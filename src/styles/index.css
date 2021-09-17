@@ -21,6 +21,19 @@
 }
 
 
+/* 下载按钮样式 */
+
+.btnDownload {
+    background-color: #ffba00;
+    border-color: #ffba00;
+}
+
+.btnDownload:hover {
+    background-color: #ffc366;
+    border-color: #ffc366;
+}
+
+
 /* 数据加载中样式 */
 
 .ant-spin-nested-loading>div>.ant-spin.ant-spin-show-text {
