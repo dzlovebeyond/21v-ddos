@@ -50,6 +50,15 @@
 
 /* 表格行-自定义颜色 */
 
-.rowClass {
-    color: red;
+.rowClassRed {
+    color: tomato;
+}
+
+.rowClassBackGrey {
+    background-color: linen;
+}
+
+.rowClassRedBackGrey {
+    color: tomato;
+    background-color: linen;
 }

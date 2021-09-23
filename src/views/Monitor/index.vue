@@ -167,7 +167,7 @@ const columns = [
 const data = [
   {
     key: '1',
-    area: '北京',
+    area: 'BJ',
     customerName: '小米科技有限公司',
     ip: '58.83.161.255',
     policyName: '华北-BGP-6G触发-牵引（小米）',
@@ -186,7 +186,7 @@ const data = [
   },
   {
     key: '2',
-    area: '经开',
+    area: 'JK',
     customerName: '北京新网数码信息技术有限公司',
     ip: '120.133.2.42',
     policyName: '华北-BGP-700M触发-牵引+清洗(付费)(新网数码)',
@@ -204,7 +204,7 @@ const data = [
   },
   {
     key: '3',
-    area: '北京',
+    area: 'BJ',
     customerName: '赛尔新技术（北京）有限公司',
     ip: '211.151.240.41',
     policyName: '华北-BGP-900M触发-牵引+清洗（赛尔）',
@@ -239,7 +239,7 @@ export default {
       tableRowClass(record) {
         // 如果没有攻击时间，表示攻击没有结束，文字标红
         if (!record.status) {
-          return "rowClass"
+          return "rowClassRed"
         }
       },
       visiblePostponed: false,
