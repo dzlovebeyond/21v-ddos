@@ -1,6 +1,6 @@
 <template>
 <a-config-provider :locale="locale">
-  <div id="app">
+  <div id="app" class="myapp">
     <!-- 路由入口 -->
     <router-view/>
   </div>
@@ -24,5 +24,11 @@ export default {
   }
 }
 </script>
-<style lang="less">
+<style scoped>
+.myapp {
+  height: 100%;
+}
+.ant-layout {
+  height: 100%!important;
+}
 </style>

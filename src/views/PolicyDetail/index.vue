@@ -1,48 +1,78 @@
 <template>
   <div>
-    策略详情
-      <!-- 策略内容 -->
-      <a-spin tip="数据正在加载中..." :spinning="loadding">
-        <!-- 表格 -->
-        <a-table
-        :columns="columns"
-        :data-source="data"
-        size="middle" 
-        :scroll="{ x: 1300}" 
-        :rowClassName="tableRowClass"
-        >
-          <!-- 操作 单元格 插槽 -->
-          <template slot="status" slot-scope="actionScope,record">
-            <span>{{ record.status ? "启用" : "未启用" }}</span>
-          </template>
+      <a-layout class="common-content">
+        <a-layout-content :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }">
+          <!-- 标题 -->
+          <div class="common-title">策略详情</div>
+          <a-divider  />
+          <!-- /标题 -->
 
-          <template slot="action" slot-scope="actionScope,record">
-            <!-- <a-divider type="vertical" /> -->
-            <a-button
-            type="link"
-            size="small"
-            icon="delete"
-            @click="del"
+          <!-- 搜索栏 -->
+          <div class="common-search-content">
+                  <a-select v-model="form.region" placeholder="所属区域" style="width: 150px" allowClear>
+                    <a-select-option value="BeiJing">
+                      北京
+                    </a-select-option>
+                    <a-select-option value="JingKai">
+                      经开
+                    </a-select-option>
+                  </a-select>
+              <a-auto-complete
+                v-model="value"
+                :data-source="dataSource"
+                style="margin-left:20px; width: 200px"
+                placeholder="所属客户"
+                @select="onSelect"
+                @search="onSearch"
+                @change="onChange"
+                allowClear
+                :dropdownMatchSelectWidth='false'
+              />
+              <a-input placeholder="IP地址 或 地址段" allowClear style="margin-left:20px; width:200px;" />
+              <a-input placeholder="策略名" allowClear style="margin-left:20px; width:200px;" />
+              <a-button type="primary" style="margin-left: 20px;" icon="search">
+                搜索
+              </a-button>
+              <a-button class="btnDownload" type="primary" style="margin-left: 20px;" icon="download">
+                导出
+              </a-button>
+          </div>
+          <!-- /搜索栏 -->
+
+          <!-- 策略内容 -->
+          <a-spin tip="数据正在加载中..." :spinning="loadding">
+            <!-- 表格 -->
+            <a-table
+            :columns="columns"
+            :data-source="data"
+            size="middle" 
+            :scroll="{ x: 1300}" 
+            :rowClassName="tableRowClass"
             >
-              删除
-            </a-button>
-          </template>
-          <!-- /操作 单元格 插槽 -->
-        </a-table>
-        <!-- /表格 -->
-      </a-spin>
-      <!-- /策略内容 -->
+            <!-- 操作 单元格 插槽 -->
+            <template slot="status" slot-scope="actionScope,record">
+                <span>{{ record.status ? "启用" : "未启用" }}</span>
+            </template>
 
+            <template slot="action" slot-scope="actionScope,record">
+                <!-- <a-divider type="vertical" /> -->
+                <a-button
+                type="link"
+                size="small"
+                icon="delete"
+                @click="del"
+                >
+                删除
+                </a-button>
+            </template>
+            <!-- /操作 单元格 插槽 -->
+            </a-table>
+            <!-- /表格 -->
+          </a-spin>
+          <!-- /策略内容 -->
 
-      <!-- 弹出面板 -->
-      <a-modal v-model="visiblePostponed" title="延期" @ok="handleOk">
-        <a-form-model :model="form" :label-col="labelCol" :wrapper-col="wrapperCol">
-          <a-form-model-item label="请输入延长时间（小时）：">
-            <a-input v-model="form.name" />
-          </a-form-model-item>
-        </a-form-model>
-      </a-modal>
-      <!-- /弹出面板 -->
+        </a-layout-content>
+      </a-layout>
 
   </div>
 </template>
@@ -231,12 +261,15 @@ const data = [
     area: 'JK'
   },
 ]
+
 export default {
   data () {
     return {
-      data,
       columns,
+      data,
+      value: '',
       dataSource: [],
+      dataList: ['小米科技有限公司', '京东尚科股份有限公司', '北京深演科技有限公司', '小米股份有限公司'],
       loadding: false,
       tableRowClass(record) {
         // 如果没有攻击时间，表示攻击没有结束，文字标红
@@ -248,15 +281,35 @@ export default {
           return "rowClassBackGrey"
         }
       },
-      visiblePostponed: false,
-      labelCol: { span: 10 },
-      wrapperCol: { span: 10 },
       form: {
         name: ''
       },
     }
   },
+  watch: {
+    value(val) {
+      console.log('value', val);
+    },
+  },
   methods: {
+    onSearch(searchText) {
+      this.dataSource = [] //每次加载时清除历史数据
+      // 根据输入的字符匹配客户名称，提供下拉列表
+      if(searchText != '') {
+        for (const x in this.dataList){ //循环客户列表与输入内容进行匹配
+          const text = this.dataList[x] //临时存储当前客户名
+          if (text.indexOf(searchText) != -1){ //如果当前客户名包含输入内容，则追加到 dataSource 列表中
+            this.dataSource.unshift(this.dataList[x])
+          }
+        }
+      }
+    },
+    onSelect(value) {
+      console.log('onSelect', value)
+    },
+    onChange(value) {
+      console.log('onChange', value)
+    },
     // 删除
     del() {
       this.$confirm({
@@ -265,7 +318,9 @@ export default {
         onCancel() {}
       })
     },
-  }
+  },
+
+
 }
 </script>
 

@@ -1,3 +1,14 @@
+/* 处理大屏幕，窗口高度不能撑开，左侧边栏不能到底问题 */
+
+.myapp {
+    height: 100%;
+}
+
+.ant-layout {
+    height: 100%!important;
+}
+
+
 /* 内容样式 */
 
 .common-content {

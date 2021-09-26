@@ -1,140 +1,169 @@
 <template>
   <div>
+      <a-layout class="common-content">
+        <a-layout-content :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }">
+          <!-- 标题 -->
+          <div class="common-title">策略总览</div>
+          <a-divider  />
+          <!-- /标题 -->
 
-      <!-- 策略内容 -->
-      <a-spin tip="数据正在加载中..." :spinning="loadding">
-        <!-- 表格 -->
-        <a-table
-        :columns="columns"
-        :data-source="data"
-        size="middle" 
-        :scroll="{ x: 1300}" 
-        :rowClassName="tableRowClass"
-        >
-          <!-- 操作 单元格 插槽 -->
-          <template slot="status" slot-scope="actionScope,record">
-            <span>{{ record.status ? "启用" : "未启用" }}</span>
-          </template>
+          <!-- 搜索栏 -->
+          <div class="common-search-content">
+                  <a-select v-model="form.region" placeholder="所属区域" style="width: 150px" allowClear>
+                    <a-select-option value="BeiJing">
+                      北京
+                    </a-select-option>
+                    <a-select-option value="JingKai">
+                      经开
+                    </a-select-option>
+                  </a-select>
+              <a-input placeholder="策略名" allowClear style="margin-left:20px; width:200px;" />
+              <a-button type="primary" style="margin-left: 20px;" icon="search">
+                搜索
+              </a-button>
+              <a-button class="btnDownload" type="primary" style="margin-left: 20px;" icon="download">
+                导出
+              </a-button>
+          </div>
+          <!-- /搜索栏 -->
 
-          <template slot="action" slot-scope="actionScope,record">
-            <!-- <a-divider type="vertical" /> -->
-            <a-button
-            type="link"
-            size="small"
-            icon="plus"
-            @click="addIp"
+          <!-- 策略内容 -->
+          <a-spin tip="数据正在加载中..." :spinning="loadding">
+            <!-- 表格 -->
+            <a-table
+            :columns="columns"
+            :data-source="data"
+            size="middle" 
+            :scroll="{ x: 1300}" 
+            :rowClassName="tableRowClass"
             >
-              添加IP段
-            </a-button>
-          </template>
-          <!-- /操作 单元格 插槽 -->
-        </a-table>
-        <!-- /表格 -->
-      </a-spin>
-      <!-- /策略内容 -->
+            <!-- 操作 单元格 插槽 -->
+            <template slot="status" slot-scope="actionScope,record">
+                <span>{{ record.status ? "启用" : "未启用" }}</span>
+            </template>
 
-      <!-- 添加IP段-步骤条 -->
-      <a-modal v-model="visibleAddIp" title="向策略添加IP段" @ok="handleOk" footer="">
-        <div>
-          <a-steps :current="current">
-            <a-step title="选择IP段" />
-            <a-step title="冲突检测" />
-            <a-step title="添加完成" />
-          </a-steps>
-          <div class="steps-content">
-            <!-- {{ steps[current].content }} -->
+            <template slot="action" slot-scope="actionScope,record">
+                <!-- <a-divider type="vertical" /> -->
+                <a-button
+                type="link"
+                size="small"
+                icon="plus"
+                @click="addIp"
+                >
+                添加IP段
+                </a-button>
+            </template>
+            <!-- /操作 单元格 插槽 -->
+            </a-table>
+            <!-- /表格 -->
+          </a-spin>
+          <!-- /策略内容 -->
 
-            <!-- 步骤一 -->
-            <a-tabs default-active-key="1" @change="callback" v-if="current == 0">
-              <a-tab-pane key="1" tab="选择客户IP段">
-                <!-- 按客户添加 -->
-                <a-form @submit="handleSubmit">
-                  <a-form-item>
-                    <a-input
-                      v-decorator="['note', { rules: [{ required: true, message: 'Please input your note!' }] }]"
-                      placeholder="客户名"
-                      style="width: 400px; margin-left: 22px;" 
-                    />
-                  </a-form-item>
-                  <a-form-item>
-                    <!-- 表格 -->
-                      <a-table
+          <!-- 添加IP段-步骤条 -->
+          <a-modal v-model="visibleAddIp" title="向策略添加IP段" @ok="handleOk" footer="">
+            <div>
+            <a-steps :current="current">
+                <a-step title="选择IP段" />
+                <a-step title="冲突检测" />
+                <a-step title="添加完成" />
+            </a-steps>
+            <div class="steps-content">
+                <!-- {{ steps[current].content }} -->
+
+                <!-- 步骤一 -->
+                <a-tabs default-active-key="1" @change="callback" v-if="current == 0">
+                <a-tab-pane key="1" tab="选择客户IP段">
+                    <!-- 按客户添加 -->
+                    <a-form @submit="handleSubmit">
+                    <a-form-item>
+                        <a-input
+                        v-decorator="['note', { rules: [{ required: true, message: 'Please input your note!' }] }]"
+                        placeholder="客户名"
+                        style="width: 400px; margin-left: 22px;" 
+                        />
+                    </a-form-item>
+                    <a-form-item>
+                        <!-- 表格 -->
+                        <a-table
+                            :columns="col"
+                            :data-source="db"
+                            :row-selection="rowSelection"
+                            :expanded-row-keys.sync="expandedRowKeys"
+                            :pagination="pagination"
+                        />
+                    </a-form-item>
+                    </a-form>
+                </a-tab-pane>
+
+                    <a-tab-pane key="2" tab="手动输入IP段">
+                    <a-textarea placeholder="1.1.1.0/24" :rows="5" style="width: 400px; margin-left:20px;"/>
+                    <a-table
                         :columns="col"
                         :data-source="db"
                         :row-selection="rowSelection"
                         :expanded-row-keys.sync="expandedRowKeys"
                         :pagination="pagination"
-                      />
-                  </a-form-item>
-                </a-form>
-              </a-tab-pane>
+                    />
+                </a-tab-pane>
+                </a-tabs>
+                <!-- /步骤一 -->
 
-                <a-tab-pane key="2" tab="手动输入IP段">
-                  <a-textarea placeholder="1.1.1.0/24" :rows="5" style="width: 400px; margin-left:20px;"/>
-                  <a-table
-                    :columns="col"
-                    :data-source="db"
-                    :row-selection="rowSelection"
-                    :expanded-row-keys.sync="expandedRowKeys"
-                    :pagination="pagination"
-                  />
-              </a-tab-pane>
-            </a-tabs>
-            <!-- /步骤一 -->
-
-            <!-- 步骤二 -->
-             <a-table
-              :columns="col2"
-              :data-source="db2"
-              :pagination="pagination"
-              v-if="current == 1"
-              :rowClassName="addIpTableRowClass"
-             >
-              <span slot="tags" slot-scope="actionScope,record">
-                <a-button
-                  type="link"
-                  size="small"
-                  icon="unlock"
-                  :disabled="record.addState ? true : false"
-                  @click="showConfirm"
+                <!-- 步骤二 -->
+                <a-table
+                :columns="col2"
+                :data-source="db2"
+                :pagination="pagination"
+                v-if="current == 1"
+                :rowClassName="addIpTableRowClass"
                 >
-                  删除
-                </a-button>
-              </span>
-            </a-table> 
-            <!-- /步骤二 -->
+                <span slot="tags" slot-scope="actionScope,record">
+                    <a-button
+                    type="link"
+                    size="small"
+                    icon="unlock"
+                    :disabled="record.addState ? true : false"
+                    @click="del"
+                    >
+                    删除
+                    </a-button>
+                </span>
+                </a-table> 
+                <!-- /步骤二 -->
 
-            <!-- 步骤三 -->
-            <div v-if="current == 2">
-             <a-table
-              :columns="col3"
-              :data-source="db3"
-              :pagination="pagination"
-              v-if="current == 2"
-              :rowClassName="addIpTableRowClass"
-             >
-             </a-table> 
+                <!-- 步骤三 -->
+                <div v-if="current == 2">
+                <a-table
+                :columns="col3"
+                :data-source="db3"
+                :pagination="pagination"
+                v-if="current == 2"
+                :rowClassName="addIpTableRowClass"
+                >
+                </a-table> 
+                </div>
+                <!-- /步骤三 -->
+
             </div>
-            <!-- /步骤三 -->
+            <div class="steps-action">
+                <a-button v-if="current == 1" type="primary" @click="prev">
+                上一步
+                </a-button>
+                <a-button v-if="current == 0" style="margin-left: 8px" type="primary" @click="next">
+                下一步
+                </a-button>
+                <a-button v-if="current == 1" style="margin-left: 8px" type="primary" @click="next">
+                提交
+                </a-button>
+                <a-button v-if="current == 2" style="margin-left: 8px" type="primary" @click="handleOk">
+                完成
+                </a-button>
+            </div>
+            </div>
+          </a-modal>
+          <!-- /添加IP段-步骤条 -->
 
-          </div>
-          <div class="steps-action">
-            <a-button v-if="current == 1" type="primary" @click="prev">
-              上一步
-            </a-button>
-            <a-button v-if="current == 0" style="margin-left: 8px" type="primary" @click="next">
-              下一步
-            </a-button>
-            <a-button v-if="current == 1" style="margin-left: 8px" type="primary" @click="next">
-              提交
-            </a-button>
-            <a-button v-if="current == 2" style="margin-left: 8px" type="primary" @click="handleOk">
-              完成
-            </a-button>
-          </div>
-        </div>
-      </a-modal>
-      <!-- /添加IP段-步骤条 -->
+        </a-layout-content>
+      </a-layout>
 
   </div>
 </template>
@@ -304,7 +333,6 @@ const col = [
     key: 'ip',
   },
   ]
-
 const db = [
   {
     name: '小米科技有限公司',
@@ -315,7 +343,6 @@ const db = [
     ip: '58.83.162.0/24'
   },
 ]
-
 const col2 = [
   {
     title: '客户名',
@@ -354,7 +381,6 @@ const col2 = [
     scopedSlots: { customRender: 'tags' },
   },
 ]
-
 const db2 = [
   {
     uname: '小米科技有限公司',
@@ -393,7 +419,6 @@ const db2 = [
     addState: 0
   }, 
 ]
-
 const col3 = [
   {
     title: '客户名',
@@ -432,7 +457,6 @@ const col3 = [
     scopedSlots: { customRender: 'tags' },
   },
 ]
-
 const db3 = [
   {
     uname: '小米科技有限公司',
@@ -462,7 +486,6 @@ const db3 = [
     addState: 0
   }, 
 ]
-
 const rowSelection = {
   onChange: (selectedRowKeys, selectedRows) => {
     console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
@@ -489,10 +512,10 @@ export default {
       db3,
       rowSelection,
       pagination: false, //隐藏分页项，隐藏页码
-      dataSource: [],
+      value: '',
       loadding: false,
       tableRowClass(record) {
-        // 根据区域设置表格行底色，根据启用状态设置行文字颜色
+        // 如果没有攻击时间，表示攻击没有结束，文字标红
         if (!record.status && record.area === 'JK') {
           return "rowClassRedBackGrey"
         } else if (!record.status && record.area === 'BJ'){
@@ -506,6 +529,8 @@ export default {
           return "rowClassRed"
         }
       },
+      visiblePostponed: false,
+      visiblePolicyTable: true,
       labelCol: { span: 10 },
       wrapperCol: { span: 10 },
       form: {
@@ -529,6 +554,11 @@ export default {
       ],
     }
   },
+  watch: {
+    value(val) {
+      console.log('value', val);
+    },
+  },
   methods: {
     addIp() {
       this.visibleAddIp = true
@@ -544,7 +574,17 @@ export default {
     prev() {
       this.current--
     },
-  }
+    // 删除
+    del() {
+      this.$confirm({
+        title: "确认删除？",
+        onOk() {},
+        onCancel() {}
+      })
+    },
+  },
+
+
 }
 </script>
 

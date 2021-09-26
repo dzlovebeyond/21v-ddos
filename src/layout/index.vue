@@ -44,7 +44,7 @@
     <!-- /nav-bar 头部区域 -->
 
     <!-- 主体区域 -->
-    <a-layout>
+    <a-layout class="my-content">
       <!-- 左侧边栏 -->
       <a-layout-sider class="left-sider" width="200" style="background: #fff">
         <a-menu
@@ -68,35 +68,40 @@
               </router-link>
             </a-menu-item>
             <a-menu-item key="3">
-              <router-link to="/policy_mgt">
-                <a-icon type="ordered-list" />策略管理
+              <router-link to="/policy_total">
+                <a-icon type="ordered-list" />策略概览
+              </router-link>
+            </a-menu-item>
+            <a-menu-item key="4">
+              <router-link to="/policy_detail">
+                <a-icon type="ordered-list" />策略详情
               </router-link>
             </a-menu-item>
           </a-sub-menu>
           <a-sub-menu key="sub3">
             <span slot="title"><a-icon type="cloud-server" />云堤管理</span>
-            <a-menu-item key="4">
+            <a-menu-item key="5">
               <a-icon type="user" />账户管理
             </a-menu-item>
-            <a-menu-item key="5">
+            <a-menu-item key="6">
               <a-icon type="lock" />手动封堵管理
             </a-menu-item>
-            <a-menu-item key="6">
+            <a-menu-item key="7">
               <a-icon type="heat-map" />自动封堵管理
             </a-menu-item>
           </a-sub-menu>
           <a-sub-menu key="sub4">
             <span slot="title"><a-icon type="dot-chart" />Genie管理</span>
-            <a-menu-item key="7">
+            <a-menu-item key="8">
               <a-icon type="security-scan" />DDOS监控
             </a-menu-item>
-            <a-menu-item key="8">
+            <a-menu-item key="9">
               <a-icon type="ordered-list" />策略管理
             </a-menu-item>
           </a-sub-menu>
           <a-sub-menu key="sub5">
             <span slot="title"><a-icon type="file-search" />日志管理</span>
-            <a-menu-item key="9">
+            <a-menu-item key="10">
               <a-icon type="file-protect" />操作记录
             </a-menu-item>
           </a-sub-menu>
@@ -134,6 +139,15 @@ export default {
 </script>
 
 <style>
+/deep/ #app {
+  height: 100%!important;
+}
+/deep/ .ant-layout {
+  height: 100%!important;
+}
+/deep/ .my-content {
+  height: 100%!important;
+}
 /* nav-bar 顶部布局 */
 .ant-layout-header{
   padding: 0 25px;
@@ -159,7 +173,7 @@ export default {
 
 /* 侧边栏样式 */
 .left-sider {
-  height: 100vh;
+  /* height: 100vh; */
 }
 .ant-layout-sider, .ant-menu-dark {
   background: #09203f!important;

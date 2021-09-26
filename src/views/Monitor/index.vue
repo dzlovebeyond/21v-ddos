@@ -293,7 +293,7 @@ export default {
     // 详情-下载
     download() {
       // window.location.href = "../../assets/trigger.csv"
-      window.open('../../assets/trigger.csv')
+      window.open('trigger.csv')
     }
   },
 
